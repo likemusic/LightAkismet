@@ -141,11 +141,11 @@
 		}
 
 		public function submitSpam ( $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl ) {
-			self::submitComment( self::REST_METHOD_NAME_SUBMIT_SPAM, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl );
+			return self::submitComment( self::REST_METHOD_NAME_SUBMIT_SPAM, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl );
 		}
 
 		public function submitHam ( $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl ) {
-			self::submitComment( self::REST_METHOD_NAME_SUBMIT_HAM, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl );
+			return self::submitComment( self::REST_METHOD_NAME_SUBMIT_HAM, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl );
 		}
 
 		protected function submitComment( $RestMethodName, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl = null ) {
@@ -208,8 +208,8 @@
 		}
 
 		protected function GetTextBetween( $Haystack, $StartMarker, $StopMarker, $Offset = 0 ) {
-			$StartPos = strpos( $StartMarker, $Offset ) + strlen($StartMarker);
-			$EndPos = strpos( $StopMarker, $StartPos );
+			$StartPos = strpos( $Haystack, $StartMarker, $Offset ) + strlen($StartMarker);
+			$EndPos = strpos( $Haystack, $StopMarker, $StartPos );
 			$Lengh = $EndPos - $StartPos;
 			$Text = substr( $Haystack, $StartPos, $Lengh);
 			return $Text;
@@ -220,7 +220,7 @@
 			$Pos = strpos( $HttpResponse, "\r\n" );
 			$FirstRow = substr( $HttpResponse, 0, $Pos );
 			$Code = self::GetTextBetween( $FirstRow, ' ', ' ');
-			settype( $Code, 'string' );
+			settype( $Code, 'integer' );
 			return $Code;
 		}
 	}
