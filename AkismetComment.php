@@ -1,5 +1,8 @@
 <?php
 
+	/**
+	*  Class Represent All fields sended to akismet service
+	*/
 	class AkismetComment
 	{
 		/**

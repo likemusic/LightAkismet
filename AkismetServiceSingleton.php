@@ -1,5 +1,7 @@
 <?php
 
+	require_once('AkismetComment.php');
+
 	/**
 	* Class for interact with Akismet server
 	*/
@@ -25,6 +27,7 @@
 		const EXCEPTION_MESSAGE_INVALID_HTTP_RESPONSE_CONTENT = 'Invalid http-response content: ';
 		const EXCEPTION_MESSAGE_INVALID_AKISMET_FUNCITON_CALL = 'Invalid function call. ResponseBody/HelpMessage: ';
 		const EXCEPTION_MESSAGE_VERIFY_KEY_FAIL = 'Verification key in construcor fail.';
+        const EXCEPTION_MESSAGE_INVALID_HTTP_RESPONSE_CODE = 'Invalid http-response code. ResponseCode/Response: ';
 
 		private function __constructor() {}
 
@@ -130,17 +133,10 @@
 					throw new Exception( $HelpMessage );
 					break;
 				default:
-					throw new Exception( self::EXCEPTION_MESSAGE_INVALID_HTTP_RESPONSE_CONTENT );
+					$ServerHelpMessage = self::GetHelpMessageFromAkismetServerHttpResponse( $Response );
+					throw new Exception( self::EXCEPTION_MESSAGE_INVALID_AKISMET_FUNCITON_CALL.$ResponseContent.'/'.$ServerHelpMessage );
 					break;	
 			}
-			/*if ( $ResponseContent === self::RESPONSE_COMMENT_CHECK_TRUE ) {
-				$IsSpam = true;	
-			} elseif( $ResponseContent === self::RESPONSE_COMMENT_CHECK_FALSE ) {
-				$IsSpam = false;
-			} elseif ()
-			if ( $ResponseContent === self::RESPONSE_METHOD_CALL_ERROR ) {
-			}
-			$IsSpam = (bool) $ResponseContent; */
 			return $IsSpam;				
 		}
 
@@ -149,7 +145,7 @@
 		}
 
 		public function submitHam ( $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl ) {
-			self::submitComment( self::REST_METHOD_NAME_SUBMIT_HAM, $CommentValues, $ApiKey, $HttpUserAgent, $BlogUrl );
+			self::submitComment( self::REST_METHOD_NAME_SUBMIT_HAM, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl );
 		}
 
 		protected function submitComment( $RestMethodName, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl = null ) {
@@ -163,18 +159,13 @@
 			$Content = http_build_query( $CommentValues );
 
 			$Response = self::HttpPost( $Host, $RequestPath, $HttpUserAgent, $Content );
-			//TODO: Check response: - http code
-			/*
-			$ResponseContent =  self::GetHttpResponseContent( $Response );
-
-			if ( $ResponseContent === self::RESPONSE_METHOD_CALL_ERROR ) {
-			$HelpMessage = self::GetHelpMessageFromAkismetServerHttpResponse( 
-			EXCEPTION_MESSAGE_INVALID_AKISMET_FUNCITON_CALL.$ResponseContent.'/'.$HelpMessage );
-			throw new Exception( $HelpMessage );
+			
+			$ResponceCode = self::GetHttpResponseCode( $Response );
+			if( $ResponceCode !== 200 ) {
+				$Message = self::EXCEPTION_MESSAGE_INVALID_HTTP_RESPONSE_CODE.$ResponceCode.'/'.$Response;
+				throw new Exception( $Message );					
 			}
-			$IsSpam = (bool) $ResponseContent;
-			return $IsSpam;				
-			*/
+			return; 
 		}
 
 		protected function HttpPost( $Host, $Path, $UserAgent, $Content ) {
@@ -182,8 +173,8 @@
 
 			$HttpRequest  = "POST {$Path} HTTP/1.0\r\n";
 			$HttpRequest .= "Host: $Host\r\n";
-			$HttpRequest .= "Content-Type: application/x-www-form-urlencoded\r\n";
 			$HttpRequest .= "User-Agent: {$UserAgent}\r\n";
+			$HttpRequest .= "Content-Type: application/x-www-form-urlencoded\r\n";
 			$HttpRequest .= "Content-Length: {$ContentLength}\r\n";
 			$HttpRequest .= "\r\n";
 			$HttpRequest .= $Content;
@@ -212,7 +203,7 @@
 		}
 
 		protected function GetHelpMessageFromAkismetServerHttpResponse( $AkismetServerHttpResponse ) {
-			$HelpMessage = self::GetTextBetween(self::AKISMET_DEBUG_HELP_HTTP_HEADER_FIRELD, self::HTTP_FIELDS_SEPARATOR);
+			$HelpMessage = self::GetTextBetween( $AkismetServerHttpResponse, self::AKISMET_DEBUG_HELP_HTTP_HEADER_FIRELD, self::HTTP_FIELDS_SEPARATOR );
 			return $HelpMessage;
 		}
 
@@ -222,6 +213,15 @@
 			$Lengh = $EndPos - $StartPos;
 			$Text = substr( $Haystack, $StartPos, $Lengh);
 			return $Text;
+		}
+		
+		protected function GetHttpResponseCode( $HttpResponse ) {
+			//HTTP/1.1 200 OK\r\n
+			$Pos = strpos( $HttpResponse, "\r\n" );
+			$FirstRow = substr( $HttpResponse, 0, $Pos );
+			$Code = self::GetTextBetween( $FirstRow, ' ', ' ');
+			settype( $Code, 'string' );
+			return $Code;
 		}
 	}
 ?>

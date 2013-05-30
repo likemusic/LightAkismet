@@ -1,4 +1,6 @@
 <?php
+	
+	require_once('AkismetServiceSingleton.php');
 
 	/**
 	* Class for interact with Akismet server with preset parameters values
@@ -58,7 +60,7 @@
 				$ApiKey = $this->ApiKey;
 			}
 			
-			AkismetServiceSingleton::getInstance()->submitSpam($ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl);
+			return AkismetServiceSingleton::getInstance()->submitSpam($ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl);
 		}
 
 		public function submitHam( $CommentValues, $BlogUrl=null, $HttpUserAgent=null, $ApiKey=null ) {
@@ -73,7 +75,7 @@
 			if( $ApiKey === null ) {
 				$ApiKey = $this->ApiKey;
 			}
-			self::submitHam( $CommentValues, $BlogUrl, $HttpUserAgent, $ApiKey );
+			return self::submitHam( $CommentValues, $BlogUrl, $HttpUserAgent, $ApiKey );
 		}
 
 		public function checkComment ( $CommentValues, $BlogUrl=null, $HttpUserAgent=null, $ApiKey=null ) {
