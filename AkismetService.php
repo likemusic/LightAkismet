@@ -26,10 +26,6 @@
 			}
 		}
 		
-		public function __construct( AkismetComment $DefaultValues ) {
-			$this->DefaultValues = $DefaultValues;
-		}
-
 		public function verifyKey( $BlogUrl = null, $HttpUserAgent=null, $ApiKey = null ) {
 			if( $BlogUrl===null ) {
 				$BlogUrl = $this->BlogUrl;
