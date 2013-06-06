@@ -8,6 +8,7 @@
 	class AkismetServiceSingleton {
 		const SERVER_HOST = 'rest.akismet.com';
 		const REST_PATH = '/1.1/';
+		const SERVER_PORT = 80;
 
 		const REST_METHOD_NAME_VERIFY_KEY = 'verify-key';
 		const REST_METHOD_NAME_COMMENT_CHECK = 'comment-check';
@@ -28,6 +29,8 @@
 		const EXCEPTION_MESSAGE_INVALID_AKISMET_FUNCITON_CALL = 'Invalid function call. ResponseBody/HelpMessage: ';
 		const EXCEPTION_MESSAGE_VERIFY_KEY_FAIL = 'Verification key in construcor fail.';
         const EXCEPTION_MESSAGE_INVALID_HTTP_RESPONSE_CODE = 'Invalid http-response code. ResponseCode/Response: ';
+        
+        const VALID_SERVER_RESPONSE_CODE = 200;
 
 		private function __constructor() {}
 
@@ -160,7 +163,7 @@
 			$Response = self::HttpPost( $Host, $RequestPath, $HttpUserAgent, $Content );
 			
 			$ResponceCode = self::GetHttpResponseCode( $Response );
-			if( $ResponceCode !== 200 ) {
+			if( $ResponceCode !== self::VALID_SERVER_RESPONSE_CODE ) {
 				$Message = self::EXCEPTION_MESSAGE_INVALID_HTTP_RESPONSE_CODE.$ResponceCode.'/'.$Response;
 				throw new Exception( $Message );					
 			}
@@ -178,7 +181,7 @@
 			$HttpRequest .= "\r\n";
 			$HttpRequest .= $Content;
 
-			$Port = 80;
+			$Port = self::SERVER_PORT;
 			$Response = $this->SendRequestAndGetResponse( $Host, $Port, $HttpRequest );
 			return $Response;
 		}
