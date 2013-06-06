@@ -107,6 +107,7 @@
 		* @param string $Blog The front page or home URL of the instance making the request.
 		* @param string $HttpUserAgent Http-request header value of UserAgent field.
 		* @param string $Key The API key being verified for use with the API
+		* @return bool
 		*/
 		public function checkComment ( $CommentValues, $Blog=null, $HttpUserAgent=null, $Key=null ) {
 			$this->setParamsVars( $Blog, $HttpUserAgent, $Key );

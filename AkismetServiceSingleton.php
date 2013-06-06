@@ -3,7 +3,7 @@
 	require_once('AkismetComment.php');
 
 	/**
-	* Class for interact with Akismet server
+	* Singleton class for interact with Akismet server
 	*/
 	class AkismetServiceSingleton {
 		const SERVER_HOST = 'rest.akismet.com';
@@ -56,15 +56,18 @@
 		* 'IsValid' - bool
 		* 'Message' - if IsValid == false - contain 'X-akismet-debug-help' field from http server response
 		* 
-		* @param string $ApiKey
-		* @param string $Blog
-		* @param string $HttpUserAgent
+		* Verify Api key
+		* @link http://akismet.com/development/api/#verify-key
+		* 
+		* @param string $Blog The front page or home URL of the instance making the request.
+		* @param string $HttpUserAgent Http-request header value of UserAgent field.
+		* @param string $Key The API key being verified for use with the API.
 		* @return array
 		*/
-		public function verifyKey( $HttpUserAgent, $ApiKey, $BlogUrl ) {
+		public function verifyKey( $HttpUserAgent, $Key, $Blog ) {
 			$Params = array(
-				'key' => $ApiKey,
-				'blog' => $BlogUrl
+				'key' => $Key,
+				'blog' => $Blog
 			);
 
 			$Content = http_build_query($Params);
@@ -100,22 +103,23 @@
 		}
 
 		/**
-		* Check comment for spam
+		* Check comment.
+		* Return  true  if this is spam or false if it's not.
+		* @link http://akismet.com/development/api/#comment-check
 		* 
-		* @param mixed $ApiKey
-		* @param mixed $HttpUserAgent
-		* @param mixed $CommentValues
-		* @param mixed $BlogUrl
-		* @param mixed $Comment
-		* @return bool true (if this is spam) or false if it's not. 
+		* @param string $Key The API key being verified for use with the API.
+		* @param string $HttpUserAgent Http-request header value of UserAgent field.
+		* @param array|AkismetComment $CommentValues  Comments propetries values.
+		* @param string $Blog The front page or home URL of the instance making the request.
+		* return bool.
 		*/
-		public function checkComment ( $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl ) {
-			$Host = $ApiKey.'.'.self::SERVER_HOST;
+		public function checkComment ( $Key, $HttpUserAgent, $CommentValues, $Blog ) {
+			$Host = $Key.'.'.self::SERVER_HOST;
 			$RequestPath = self::REST_PATH.self::REST_METHOD_NAME_COMMENT_CHECK;
 
 			if( $CommentValues instanceof AkismetComment ) $CommentValues = (array) $CommentValues; 			
-			if( $BlogUrl !== null )	{
-				$CommentValues['blog'] = $BlogUrl;
+			if( $Blog !== null )	{
+				$CommentValues['blog'] = $Blog;
 			}		
 
 			$Content = http_build_query( $CommentValues );
@@ -142,20 +146,38 @@
 			return $IsSpam;				
 		}
 
-		public function submitSpam ( $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl ) {
-			return self::submitComment( self::REST_METHOD_NAME_SUBMIT_SPAM, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl );
+		/**
+		* Submit spam.
+		* @link http://akismet.com/development/api/#submit-spam
+		* 
+		* @param string $Key The API key being verified for use with the API
+		* @param string $HttpUserAgent Http-request header value of UserAgent field.
+		* @param array|AkismetComment $CommentValues  Comments propetries values.
+		* @param string $Blog The front page or home URL of the instance making the request.
+		*/
+		public function submitSpam ( $Key, $HttpUserAgent, $CommentValues, $Blog ) {
+			return self::submitComment( self::REST_METHOD_NAME_SUBMIT_SPAM, $Key, $HttpUserAgent, $CommentValues, $Blog );
 		}
 
-		public function submitHam ( $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl ) {
-			return self::submitComment( self::REST_METHOD_NAME_SUBMIT_HAM, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl );
+		/**
+		* Submit Ham
+		* @link http://akismet.com/development/api/#submit-ham
+		* 
+		* @param string $Key The API key being verified for use with the API
+		* @param string $HttpUserAgent Http-request header value of UserAgent field.
+		* @param array|AkismetComment $CommentValues  Comments propetries values.
+		* @param string $Blog The front page or home URL of the instance making the request.
+		*/
+		public function submitHam ( $Key, $HttpUserAgent, $CommentValues, $Blog ) {
+			return self::submitComment( self::REST_METHOD_NAME_SUBMIT_HAM, $Key, $HttpUserAgent, $CommentValues, $Blog );
 		}
 
-		protected function submitComment( $RestMethodName, $ApiKey, $HttpUserAgent, $CommentValues, $BlogUrl = null ) {
-			$Host = $ApiKey.'.'.self::SERVER_HOST;
+		protected function submitComment( $RestMethodName, $Key, $HttpUserAgent, $CommentValues, $Blog = null ) {
+			$Host = $Key.'.'.self::SERVER_HOST;
 			$RequestPath = self::REST_PATH.$RestMethodName;
 
-			if( $BlogUrl !== null )	{
-				$CommentValues['blog'] = $BlogUrl;
+			if( $Blog !== null )	{
+				$CommentValues['blog'] = $Blog;
 			}		
 
 			$Content = http_build_query( $CommentValues );
