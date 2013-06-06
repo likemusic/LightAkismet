@@ -110,14 +110,13 @@
 			$Host = $ApiKey.'.'.self::SERVER_HOST;
 			$RequestPath = self::REST_PATH.self::REST_METHOD_NAME_COMMENT_CHECK;
 
+			if( $CommentValues instanceof AkismetComment ) $CommentValues = (array) $CommentValues; 			
 			if( $BlogUrl !== null )	{
 				$CommentValues['blog'] = $BlogUrl;
 			}		
 
 			$Content = http_build_query( $CommentValues );
-
 			$Response = self::HttpPost( $Host, $RequestPath, $HttpUserAgent, $Content );
-
 			$ResponseContent =  self::GetHttpResponseContent( $Response );
 			
 			switch( $ResponseContent ) {
