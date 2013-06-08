@@ -74,12 +74,22 @@
 		* @param string $Key The API key being verified for use with the API
 		*/
 		public function setDefaults( AkismetComment $CommentValues=null,  $Blog=null, $HttpUserAgent=null, $Key=null ) {
-			if( $CommentValues !== null ) $this->DefaultCommentValues = $CommentValues;
+			if( $CommentValues !== null ) $this->setDefaultCommentValues( $CommentValues );
+			
 			if( $Blog !== null ) $this->Blog = $Blog;
-			if( $this->Blog === null ) $this->Blog = $this->DefaultCommentValues->blog;
-
 			if( $HttpUserAgent !== null ) $this->HttpClientUserAgent = $HttpUserAgent;
 			if( $Key !== null ) $this->Key = $Key;
+		}
+		
+		public function setDefaultCommentValues( AkismetComment $CommentValues ) {
+			$this->DefaultCommentValues = $CommentValues;	
+			if( $CommentValues->blog !== null ) {
+				$this->Blog = $CommentValues->blog;
+			}
+		}
+		
+		public function getDefaultCommentValues() {
+			return $this->DefaultCommentValues; 
 		}
 
 		/**
