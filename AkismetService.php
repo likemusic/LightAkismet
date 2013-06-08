@@ -35,9 +35,9 @@
 		/**
 		* Dafault comments propetries values
 		* 
-		* @var AkismetComment|array
+		* @var AkismetComment
 		*/
-		public $DefaultCommentValues = array();
+		protected $DefaultCommentValues;
 
 		/**
 		* Internal used singleton
@@ -60,7 +60,7 @@
 		* @return AkismetService
 		*/
 		public function __construct( $Key=null, $HttpUserAgent=null, $Blog=null, $DefaultCommentValues=null, $AutoVerifyKey = false ) {
-			$this->setDafaults( $DefaultCommentValues, $Blog, $HttpUserAgent, $Key );
+			$this->setDefaults( $DefaultCommentValues, $Blog, $HttpUserAgent, $Key );
 			$this->AkismetSingleton = AkismetServiceSingleton::getInstance();
 
 			if( $AutoVerifyKey ) {
@@ -71,15 +71,15 @@
 		/**
 		* Set dafult values for all Akismet variables
 		* 
-		* @param array|AkismetComment $CommentValues Comments propetries values.
+		* @param AkismetComment $CommentValues Comments propetries values.
 		* @param string $Blog The front page or home URL of the instance making the request.
 		* @param string $HttpUserAgent Http-request header value of UserAgent field.
 		* @param string $Key The API key being verified for use with the API
 		*/
-		public function setDafaults( $CommentValues,  $Blog=null, $HttpUserAgent=null, $Key=null ) {
+		public function setDefaults( AkismetComment $CommentValues,  $Blog=null, $HttpUserAgent=null, $Key=null ) {
 			if( $CommentValues !== null ) $this->DefaultCommentValues = $CommentValues;
 			if( $Blog !== null ) $this->Blog = $Blog;
-			if( $this->Blog === null ) $this->Blog = $DefaultCommentValues[self::PARAM_NAME_BLOG];
+			if( $this->Blog === null ) $this->Blog = $this->DefaultCommentValues->blog;
 
 			if( $HttpUserAgent !== null ) $this->HttpClientUserAgent = $HttpUserAgent;
 			if( $Key !== null ) $this->Key = $Key;

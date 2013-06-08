@@ -109,17 +109,16 @@
 		* 
 		* @param string $Key The API key being verified for use with the API.
 		* @param string $HttpUserAgent Http-request header value of UserAgent field.
-		* @param array|AkismetComment $CommentValues  Comments propetries values.
+		* @param AkismetComment $CommentValues  Comments propetries values.
 		* @param string $Blog The front page or home URL of the instance making the request.
 		* return bool.
 		*/
-		public function checkComment ( $Key, $HttpUserAgent, $CommentValues, $Blog ) {
+		public function checkComment ( $Key, $HttpUserAgent, AkismetComment $CommentValues, $Blog ) {
 			$Host = $Key.'.'.self::SERVER_HOST;
 			$RequestPath = self::REST_PATH.self::REST_METHOD_NAME_COMMENT_CHECK;
 
-			if( $CommentValues instanceof AkismetComment ) $CommentValues = (array) $CommentValues; 			
 			if( $Blog !== null )	{
-				$CommentValues['blog'] = $Blog;
+				$CommentValues->blog = $Blog;
 			}		
 
 			$Content = http_build_query( $CommentValues );
@@ -152,10 +151,10 @@
 		* 
 		* @param string $Key The API key being verified for use with the API
 		* @param string $HttpUserAgent Http-request header value of UserAgent field.
-		* @param array|AkismetComment $CommentValues  Comments propetries values.
+		* @param AkismetComment $CommentValues  Comments propetries values.
 		* @param string $Blog The front page or home URL of the instance making the request.
 		*/
-		public function submitSpam ( $Key, $HttpUserAgent, $CommentValues, $Blog ) {
+		public function submitSpam ( $Key, $HttpUserAgent, AkismetComment $CommentValues, $Blog ) {
 			return self::submitComment( self::REST_METHOD_NAME_SUBMIT_SPAM, $Key, $HttpUserAgent, $CommentValues, $Blog );
 		}
 
@@ -165,19 +164,19 @@
 		* 
 		* @param string $Key The API key being verified for use with the API
 		* @param string $HttpUserAgent Http-request header value of UserAgent field.
-		* @param array|AkismetComment $CommentValues  Comments propetries values.
+		* @param AkismetComment $CommentValues  Comments propetries values.
 		* @param string $Blog The front page or home URL of the instance making the request.
 		*/
-		public function submitHam ( $Key, $HttpUserAgent, $CommentValues, $Blog ) {
+		public function submitHam ( $Key, $HttpUserAgent, AkismetComment $CommentValues, $Blog ) {
 			return self::submitComment( self::REST_METHOD_NAME_SUBMIT_HAM, $Key, $HttpUserAgent, $CommentValues, $Blog );
 		}
 
-		protected function submitComment( $RestMethodName, $Key, $HttpUserAgent, $CommentValues, $Blog = null ) {
+		protected function submitComment( $RestMethodName, $Key, $HttpUserAgent, AkismetComment $CommentValues, $Blog = null ) {
 			$Host = $Key.'.'.self::SERVER_HOST;
 			$RequestPath = self::REST_PATH.$RestMethodName;
-
+			
 			if( $Blog !== null )	{
-				$CommentValues['blog'] = $Blog;
+				$CommentValues->blog = $Blog;
 			}		
 
 			$Content = http_build_query( $CommentValues );
