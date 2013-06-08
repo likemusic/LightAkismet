@@ -46,9 +46,6 @@
 		*/
 		protected $AkismetSingleton;
 
-
-		const PARAM_NAME_BLOG = 'blog';
-
 		/**
 		* Constructor
 		* 
