@@ -76,7 +76,7 @@
 		* @param string $HttpUserAgent Http-request header value of UserAgent field.
 		* @param string $Key The API key being verified for use with the API
 		*/
-		public function setDefaults( AkismetComment $CommentValues,  $Blog=null, $HttpUserAgent=null, $Key=null ) {
+		public function setDefaults( AkismetComment $CommentValues=null,  $Blog=null, $HttpUserAgent=null, $Key=null ) {
 			if( $CommentValues !== null ) $this->DefaultCommentValues = $CommentValues;
 			if( $Blog !== null ) $this->Blog = $Blog;
 			if( $this->Blog === null ) $this->Blog = $this->DefaultCommentValues->blog;
