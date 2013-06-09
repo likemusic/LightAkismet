@@ -39,7 +39,7 @@
 			}
 		}
 
-		public function SetFromArray( $ArrayValues ) {
+		protected function SetFromArray( $ArrayValues ) {
 			foreach ( get_object_vars($this) as $attr_name => $attr_value ) {
 				if( ( $this->{$attr_name} === null ) && isset( $ArrayValues[$attr_name] ) ) {
 					$this->{$attr_name} = $ArrayValues[$attr_name];
