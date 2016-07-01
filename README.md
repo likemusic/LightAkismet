@@ -148,3 +148,6 @@ LightAkismet - библиотека написанная на PHP предназ
 # Благодарности
 
 Библиотека оплачена и создана благодаря [Хостинговой компании 2by2host](http://www.2by2host.com/) и [Aimbox](http://aimbox.com/).
+
+# Licence
+The MIT License (MIT).
