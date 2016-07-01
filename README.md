@@ -61,6 +61,89 @@ LightAkismet - библиотека написанная на PHP предназ
 
 Скорее всего в своем коде вы будете использовать именно его, т.к. он позволяет задать значения по умолчанию абсолютно для всех параметров, необходимых для взаимодействия с api-сервером Akismet. Задать неизменные значения можно как в конструкторе при создании класса, так и в процессе использования с помощью метода setDefauls();
 
+### Обязательные параметры методов API Akismet
+Описание параметров можно найти на сайте [Akismet](http://akismet.com/development/api/).
+
+Классы библиотеки LightAkismet перед вызовом серверных функций не проверяют установлены ли все обязательные параметры, т.к. на данный момент поведение сервера не совпадает с описанным в документации.
+
+Ниже расположена таблица показывающая отличия информации в офф. документации и реальным поведением сервера.
+
+<table border="1">
+    <tbody>
+        <tr>
+            <td rowspan="3" style="text-align: center;">Name</td>
+            <td colspan="3" style="text-align: center;">Required</td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">By documentation</td><td colspan="2" style="text-align: center;">Really</td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">comment-check,<br>submit-spam,<br>submit-ham</td>
+            <td style="text-align: center;">comment-check</td>
+            <td style="text-align: center;">submit-spam,<br>submit-ham</td>
+        </tr>
+        <tr>
+            <td>blog</td>
+            <td style="text-align: center;"> + </td>
+            <td style="text-align: center;"> + </td>
+            <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>user_ip</td>
+            <td style="text-align: center;"> + </td>
+            <td style="text-align: center;"> + </td>
+            <td style="text-align: center;"> &nbsp;</td>
+        </tr>
+        <tr>
+            <td> user_agent</td>
+            <td style="text-align: center;"> + </td>
+            <td style="text-align: center;"> &nbsp; </td>
+            <td style="text-align: center;"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td> refferer</td>
+            <td style="text-align: center;"> &nbsp; </td>
+            <td style="text-align: center;"> &nbsp; </td>
+            <td style="text-align: center;"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td> permalink</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+        </tr>
+        <tr>
+            <td> comment_type</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+        </tr>
+        <tr>
+            <td> comment_author</td>
+            <td style="text-align: center;"> &nbsp; </td>
+            <td style="text-align: center;"> &nbsp; </td>
+            <td style="text-align: center;"> &nbsp; </td>
+        </tr>
+        <tr>
+            <td> comment_author_email</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+        </tr>
+        <tr>
+            <td> comment_author_url</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+        </tr>
+        <tr>
+            <td> comment_content</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+            <td style="text-align: center;"> &nbsp;</td>
+        </tr>
+    </tbody>
+</table>
 
 # Благодарности
 
