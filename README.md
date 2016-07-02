@@ -1,73 +1,77 @@
-﻿[English version](README.en.md)
-# Важно!!!
+[Версия на русском (оригинал)](README.ru.md)
 
-Библиотека была написана в 2013 году. Информация описанная здесь может быть (верятнее всего) устарела. Код выложен в качестве примера моего кода для поиска работы. Скорее всего, что сейчас на [Packagist](https://packagist.org/search/?q=akismet) вы сможете найти более новые и удобные и качественные библиотеки для работы с Akismet.
+# Warning!!!
+
+This library was written in 2013. The information described here can be (veratnet all) is deprecated. Code posted as an example of my code for job search. Chances are that now on [Packagist](https://packagist.org/search/?q=akismet) you can find new and more convenient and high-quality library for working with Akismet.
+
 
 # LightAkismet
 
-LightAkismet - библиотека написанная на PHP предназначена для простого взаимодействия с антиспам-сервисом [Akismet](https://akismet.com/).
+Light Akismet Library is intended for simple interaction with antispam-service [Akismet](http://akismet.com/), written in PHP.
 
 
-## О сервисе Akismet
+## About Akismet service
 
-Сервис Akismet представляет собой сервер с помощью которого можно проверить является ли комментарий спамом, а также послать сообщения содержащее спам для добавление его в базу. Также можно сообщить серверу что некоторые комментарии ошибочно определены как спам. Все это вместе позволяет использовать его многим людям, одновременно помогая друг-другу.
+Akismet service represents a server, that helps to check (verify) if the comment is a spam, and send spam containing message to add it in the base. Also it's possible to report the server, that some comments were defined as spam by mistake. All these features allow many people to use it, helping each other simultaneously.
 
-Сервис имеет несколько тарифных планов, включая бесплатный. Более подробно с ними можно познакомиться [на сайте](https://akismet.com/plans/).
+The service has several tariff plans, including the free one. More details can be found here https://akismet.com/signup/.
 
-Для работы с сервисом необходимо получить специальный ключ, который необходим для обращения к серверу. Получить ключ можно бесплатно [на сайте Akismet](https://akismet.com/).
+To work with the service you need to get a special key to call (access) the server. You can get the key free of charge on the Akismet page.
 
 
-## О библиотеке LightAkismet
+## About LightAkismet library
 
-Библиотека была написана для простого взаимодействия с сервисом Akismet, т.к. существующие реализации не удовлетворяли всем необходимым в работе требованиям. Они не устраивали, т.к. были в чем-то ограничены, в чем-то устаревши, в чем-то сложны и не гибки. Рекомендую ознакомится со [Cравнением бибилотеки LightAkismet с другими реализациями (Akismet Php4, Akismet Php5, Microakismet](compare.md).
+The library was written for simple interaction with the Akismet service. It was written, as all the existing realizations didn't meet all the requirements. Realizations that already existed didn't suit, as they were in some way limited, out-of-date, complicated and inflexible. We recommend to become familiar with the "Comparison of LightAkismet Library with other realizations (Akismet Php4, Akismet Php5, Microakismet)".
 
-Преимуществом библиотеки является гибкость настройки и использования в сочетании с простотой.
+The advantage of the library is configuration flexibility and usability.
 
-Вся библиотека состоит всего из 3-х классов.
+The whole library consists of 3 classes only.
 
-* `AkismetComment` - предназначен для описания свойств комментария передаваемого в функции сервера.
-* `AkismetServiceSingleton` - класс-одиночка, содержащий все методы сервиса Akismet, для вызова которых необходимо установить все необходимые параметры, такие как свойства комментария, ключ для работы с API, а также значение для поля UserAgent http-заголовка запроса к серверу.
-* `AkismetService` - класс, позволяющий задать значения по умолчанию для всех параметров необходимых для работы с сервером Akismet, как при создании класса, так и в процессе работы с ним. Это позволяет в дальнейшем при использовании задавать только действительно изменяющиеся параметры. То есть класс AkismetService практически повторяет функциональность класса AkismetServiceSingleton. Но его отличие заключается в том, что он содержит предопределенные значения параметров, необходимых для работы с API сервера Akismet.
+* `AkismetComment` - is intended for describing the features of the comment, that is transferred to the server function.
+* `AkismetServiceSingleton` - a singleton, that contains all methods of Akismet service. To call these methods you need to install all necessary parameters, such as comment's features, the key to work with API, and the value for UserAgent field http-header of server call.
+* `AkismetService` - class, that allows to set default values for all parameters, that are needed to work with server, while creating the class and during the process of work with the class. It allows to set only actually changeable parameters in the future.
+
+Besides, AkismetService class virtually repeats functionality of AkismetServiceSingleton class. It's difference: it contains predefined  values of parameters, required for work with Akismet server.
 
 
 ### AkismetComment
 
-Этот класс предназначен для представления свойств проверяемого комментария. Он содержит поля одноименные с параметрами передаваемыми серверу Akismet, и описанными в [официальной документации](https://akismet.com/development/api/), что, естественно, очень удобно при его использовании. 
+This class is intended for representation of the checked comment's attributes. It contains components of the same name with the parameters, transferred to the Akismet server, and described in the [official documentation](https://akismet.com/development/api/),  what is naturally very convenient  when it's used.
 
-Экземпляра этого класса может быть легко создан на основе ассоциативного массива в котором ключи соответствуют именам параметров передаваемых на сервер.
+Instance of this class can be easily created on basis of associative massive, in which keys correspond with the names of parameters, transferred to the server.
 
     $Object = new AkismetComment( $Array );
 
-Это позволит вам легко перейти на его использование с уже существующим кодом, где параметры комментария могут извлекаться в виде массива (например из БД).
+This will help you to go over to using it with the existing code, where the comment's parameters can be extracted in the form of array (for example, from the database).
 
 
 ### AkismetServiceSingleton
 
-Содержит всего 3 функции, соответствующие функциям описанным в документации Akismet.
+Contains only 3 functions, that  correspond  to the functions, described in the Akismet documentation.
+* `checkComment` - checks, if the comment is a spam.
+* `submitSpam` - sends a spam comment  to the server.
+* `submitHam` - sends a comment,  mistakenly defined as spam, to the server.
 
-* `checkComment` - проверяет является ли комментарий спамом.
-* `submitSpam` - отправляет на сервер комментарий являющийся спамом.
-* `submitHam` - отправляет на сервер комментарий, ошибочно определенный как спам.
+The main difference from the names of server functions - function `checkComment``, used for server function [comment-check](https://akismet.com/development/api/#comment-check) - is made for unification - the first word of all functions is a verb.
 
-Единственное отличие от имент серверных функций - функция `checkComment` используемая для серверной функции [comment-check](https://akismet.com/development/api/#comment-check). Это сделано для унификации: первое слово всех функций - глагол.
+To use the functions of this class one should set (specify, assign) all the necessary parameters, both  for the comment itself, and for the http-header request and key for work with api server.
 
-Для использования функций этого класса необходимо задать абсолютно все обязательные параметры, как самого комментария, так и http-заголовка запроса и ключ для работы с api сервера Akismet.
-
-Этот класс используется классом `AkismetService`. В большинстве случаев вам не понадобиться работать с ним напрямую, т.к. он не позволяет задать значения по умолчанию для переменных и предназначен для непосредственной работы с сервером. Скорее всего, что для Ваших нужд более удобным вариантом будет использование класса `AkismetService`.
+This class is used by AkismetService class. In most cases you won't need to work with it directly, as it doesn't allow to set default values for the variables and is intended for the direct work with the server. Using AkismetService class is likely to be more convenient variant for your needs.
 
 
 ### AkismetService
 
-Как и класс [AkismetServiceSingleton](#akismetservicesingleton) содержит 3 функции, соответствующие функциям описанным в документации Akismet. Но, как уже было сказано выше, его отличие заключается в том, что он содержит предопределенные значения параметров, необходимых для работы с API сервера Akismet.
+Like [AkismetServiceSingleton](#akismetservicesingleton) this  class contain 3 methods, related to Akismet API. But, as already mentioned above, the difference is that it contains predefined values for parameters needed to work with the Akismet API servers.
 
-Скорее всего в своем коде вы будете использовать именно его, т.к. он позволяет задать значения по умолчанию абсолютно для всех параметров, необходимых для взаимодействия с api-сервером Akismet. Задать неизменные значения можно как в конструкторе при создании класса, так и в процессе использования с помощью метода setDefauls();
+You are likely to use it in your code, as it allows to set default values for all the parameters, that are needed for interaction with Akismet server. You can set constant values both in the builder during creation of the class, and in the process of usage with the help of `setDefaults()` method.
 
-### Обязательные параметры методов API Akismet
-Описание параметров можно найти на сайте [Akismet](http://akismet.com/development/api/).
 
-Классы библиотеки LightAkismet перед вызовом серверных функций не проверяют установлены ли все обязательные параметры, т.к. на данный момент поведение сервера не совпадает с описанным в документации.
+### Akismet API's methods required params (arguments)
+Parameters description can be found on [Akismet documentation](http://akismet.com/development/api/).
 
-Ниже расположена таблица показывающая отличия информации в офф. документации и реальным поведением сервера.
+LightAkismet Library classes don't check if all necessary parameters are installed before server's functions call, because server's behavior doesn't match with the one described in the documentation at the moment.
+
+Table, showing the difference of information in the official documentation and real server's behavior, is situated below.
 
 <table border="1">
     <tbody>
@@ -146,9 +150,10 @@ LightAkismet - библиотека написанная на PHP предназ
     </tbody>
 </table>
 
-# Благодарности
 
-Библиотека оплачена и создана благодаря [Хостинговой компании 2by2host](http://www.2by2host.com/) и [Aimbox](http://aimbox.com/).
+# Appreciation
+
+This library sponsored and requested by [Hosting company 2by2host](http://www.2by2host.com/) and [Aimbox](http://aimbox.com/).
 
 # Licence
 The MIT License (MIT).
