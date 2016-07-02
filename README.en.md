@@ -2,7 +2,7 @@
 
 # Warning!!!
 
-This library was written in 2013. The information described here can be (veratnet all) is deprecated. Code posted as an example of my code for job search. Chances are that now on [Packagist](https://packagist.org/search/?q=akismet you can find new and more convenient and high-quality library for working with Akismet.
+This library was written in 2013. The information described here can be (veratnet all) is deprecated. Code posted as an example of my code for job search. Chances are that now on [Packagist](https://packagist.org/search/?q=akismet) you can find new and more convenient and high-quality library for working with Akismet.
 
 
 # LightAkismet
