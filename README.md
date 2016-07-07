@@ -155,5 +155,9 @@ Table, showing the difference of information in the official documentation and r
 
 This library sponsored and requested by [Hosting company 2by2host](http://www.2by2host.com/) and [Aimbox](http://aimbox.com/).
 
+# TODO
+- Find better solition on packegist and add link to here or test this and add to packegist.
+- Add namespace.
+
 # Licence
 The MIT License (MIT).
