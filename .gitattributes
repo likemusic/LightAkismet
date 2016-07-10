@@ -1,0 +1,5 @@
+/.gitignore   export-ignore
+/Compare.md   export-ignore
+/README.md    export-ignore
+/README.ru.md export-ignore
+/Test.php     export-ignore
